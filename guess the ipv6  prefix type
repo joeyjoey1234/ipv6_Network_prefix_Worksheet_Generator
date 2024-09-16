@@ -2,43 +2,35 @@ import random
 from fpdf import FPDF
 import ipaddress
 
-
 # Functions to generate specific types of IPv6 addresses
 
 # Global Unicast (2000::/3)
 def generate_global_unicast():
     return ipaddress.IPv6Address(random.randint(0x20000000000000000000000000000000, 0x3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF))
 
-
 # Unique Local (fc00::/7)
 def generate_unique_local():
     return ipaddress.IPv6Address(random.randint(0xFC000000000000000000000000000000, 0xFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF))
-
 
 # Link-Local (fe80::/10)
 def generate_link_local():
     return ipaddress.IPv6Address(random.randint(0xFE800000000000000000000000000000, 0xFEBFFFFFFFFFFFFFFFFFFFFFFFFFFFFF))
 
-
 # Site-Local (deprecated) (fec0::/10)
 def generate_site_local():
     return ipaddress.IPv6Address(random.randint(0xFEC00000000000000000000000000000, 0xFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF))
-
 
 # Unspecified (::/128)
 def generate_unspecified():
     return ipaddress.IPv6Address("::")
 
-
 # Loopback (::1/128)
 def generate_loopback():
     return ipaddress.IPv6Address("::1")
 
-
 # Multicast (ff00::/8)
 def generate_multicast():
     return ipaddress.IPv6Address(random.randint(0xFF000000000000000000000000000000, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF))
-
 
 # Function to generate a random address from the above types
 def generate_random_ipv6_address():
@@ -53,7 +45,6 @@ def generate_random_ipv6_address():
     ]
     address_type, generator_func = random.choice(generators)
     return str(generator_func()), address_type
-
 
 # Function to create the PDF with IPv6 addresses and answer fields
 def create_ipv6_address_type_test(prefix_count=10, file_name="ipv6_address_type_test.pdf"):
@@ -75,13 +66,13 @@ def create_ipv6_address_type_test(prefix_count=10, file_name="ipv6_address_type_
     # Store the answers for the answer sheet at the end
     answers = []
 
-    # Generating random IPv6 addresses with answer fields
+    # Generating random IPv6 addresses with numbered answer fields
     for i in range(prefix_count):
         ipv6_address, address_type = generate_random_ipv6_address()
-
+        
         # Display the IPv6 address and leave space for the answer field
         pdf.cell(100, 10, txt=f"{i + 1}. {ipv6_address}", ln=False)
-        pdf.cell(90, 10, txt="Answer: __________________________", ln=True)
+        pdf.cell(90, 10, txt=f"{i + 1}. Answer: __________________________", ln=True)
 
         # Store the correct answer for later
         answers.append(f"{i + 1}. {ipv6_address} -> {address_type}")
@@ -98,7 +89,6 @@ def create_ipv6_address_type_test(prefix_count=10, file_name="ipv6_address_type_
     # Save the PDF to the specified file
     pdf.output(file_name)
     print(f"PDF generated with {prefix_count} IPv6 addresses and answer sheet at the end: {file_name}")
-
 
 # Run the script
 if __name__ == "__main__":
